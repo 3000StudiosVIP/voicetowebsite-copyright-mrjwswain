@@ -72,68 +72,9 @@ For any inquiries regarding this software:
 **© 2024-2026 3000 Studios. All Rights Reserved.**  
 *Unauthorized reproduction or distribution is strictly prohibited.*
 
-2. **Enable Vertex AI APIs**:
-   ```bash
-   gcloud services enable aiplatform.googleapis.com
-   gcloud services enable speech.googleapis.com
-   gcloud services enable texttospeech.googleapis.com
-   ```
 
-3. **Create Service Account**:
-   ```bash
-   gcloud iam service-accounts create vertex-ai-service \
-     --description="Service account for Vertex AI operations" \
-     --display-name="Vertex AI Service"
-   ```
 
-4. **Grant Permissions**:
-   ```bash
-   gcloud projects add-iam-policy-binding 3000-studios-project \
-     --member="serviceAccount:vertex-ai-service@3000-studios-project.iam.gserviceaccount.com" \
-     --role="roles/aiplatform.user"
-   ```
 
-5. **Generate Service Account Key**:
-   ```bash
-   gcloud iam service-accounts keys create service-account-key.json \
-     --iam-account=vertex-ai-service@3000-studios-project.iam.gserviceaccount.com
-   ```
-
-### 3. Environment Configuration
-
-Copy `.env.example` to `.env.local` and configure:
-
-```bash
-# Google Cloud Configuration
-GOOGLE_CLOUD_PROJECT_ID=3000-studios-project
-GOOGLE_CLOUD_LOCATION=us-central1
-GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
-
-# Vertex AI Configuration
-VERTEX_AI_PROJECT=3000-studios-project
-VERTEX_AI_LOCATION=us-central1
-VERTEX_AI_MODEL=gemini-1.5-pro
-
-# Speech Configuration
-SPEECH_LANGUAGE_CODE=en-US
-SPEECH_MODEL=latest_long
-
-# Text-to-Speech Configuration
-TTS_LANGUAGE_CODE=en-US
-TTS_VOICE_NAME=en-US-Neural2-D
-
-# Gemini API (fallback)
-GEMINI_API_KEY=your_gemini_api_key
-
-# Firebase Configuration
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-# ... other Firebase config
-
-# Stripe Configuration
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_PUBLISHABLE_KEY=pk_test_...
-```
 
 ### 4. Development Server
 

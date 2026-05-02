@@ -9,6 +9,7 @@
  * Unauthorized use, reproduction, or distribution is strictly prohibited.
  */
 
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 import express from "express";
 import path from "path";
@@ -20,6 +21,14 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Initialize Gemini
+const genAI = process.env.GOOGLE_API_KEY ? new GoogleGenerativeAI(process.env.GOOGLE_API_KEY) : null;
+const model = genAI ? genAI.getGenerativeModel({ model: "gemini-1.5-pro" }) : null;
+
+if (!genAI || !model) {
+  console.warn("Warning: GOOGLE_API_KEY is not configured. AI features will be disabled.");
+}
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2024-12-18.acacia" as any,
@@ -49,6 +58,41 @@ async function startServer() {
   // API routes
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok", brand: "VoiceToWebsite.com" });
+  });
+
+  app.post("/api/generate-site", async (req, res) => {
+    if (!model) {
+      return res.status(500).json({ error: "Gemini AI model is not configured." });
+    }
+
+    const { user_voice_input } = req.body;
+
+    if (!user_voice_input) {
+      return res.status(400).json({ error: "user_voice_input is required." });
+    }
+
+    const prompt = `
+    User Input: ${user_voice_input}
+    
+    Task: Act as a Senior UI/UX Developer. Create a bespoke, high-conversion website.
+    Requirements:
+    - Use Tailwind CSS for modern styling.
+    - No generic templates; use unique layouts.
+    - Write SEO-optimized copy based on the voice input.
+    - Ensure 100% mobile responsiveness.
+    
+    Output ONLY the full HTML/CSS code block.
+    `;
+    
+    try {
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      res.send(text);
+    } catch (error) {
+      console.error("Error generating site with Gemini:", error);
+      res.status(500).json({ error: "Failed to generate website content." });
+    }
   });
 
   app.get("/api/media", async (req, res) => {
