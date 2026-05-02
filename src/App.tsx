@@ -1,32 +1,35 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
+ * VoiceToWebsite - AI-Powered Website Generator
+ *
+ * Copyright © 2024-2026 3000 Studios. All rights reserved.
+ * Owner: 3000 Studios
+ * Creator: Mr. JW Swain (mr.jwswain@gmail.com)
+ *
+ * This software is proprietary and confidential.
+ * Unauthorized use, reproduction, or distribution is strictly prohibited.
  */
 
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "motion/react";
-import { 
-  Mic, 
-  Terminal, 
-  Layout, 
-  Cpu, 
-  Menu, 
-  X, 
-  ArrowRight,
-  Shield,
-  Zap,
-  Globe,
-  MessageSquare,
-  BarChart3,
-  Settings,
-  User,
-  LogOut,
-  Plus,
-  CreditCard
+import {
+    BarChart3,
+    Cpu,
+    CreditCard,
+    Globe,
+    Layout,
+    Menu,
+    MessageSquare,
+    Mic,
+    Plus,
+    Settings,
+    Shield,
+    User,
+    X,
+    Zap
 } from "lucide-react";
-import { useState, useEffect, FormEvent } from "react";
-import { cn } from "./lib/utils";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Link, Route, Routes, useLocation } from "react-router-dom";
 import { PricingSection, TrustSection } from "./components/home/HomeContent";
+import { cn } from "./lib/utils";
 
 // --- Components ---
 const Navbar = () => {
@@ -316,8 +319,8 @@ const SignUpPage = () => (
   </div>
 );
 
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useAuth } from "./lib/AuthContext";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "./lib/firebase";
 
 const Dashboard = () => {
@@ -461,8 +464,8 @@ const Dashboard = () => {
    );
 };
 
-import { TermsOfService, PrivacyPolicy, DMCA } from "./components/Legal";
-import { ExamplesPage, FAQPage, AboutPage, StoriesPage, SuccessPage, SetupPage, SupportPage, SitePreviewPage } from "./components/Pages";
+import { DMCA, PrivacyPolicy, TermsOfService } from "./components/Legal";
+import { AboutPage, ExamplesPage, FAQPage, SetupPage, SitePreviewPage, StoriesPage, SuccessPage, SupportPage } from "./components/Pages";
 
 const AdminPanel = () => {
   const { user, role, loading } = useAuth();

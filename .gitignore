@@ -1,3 +1,9 @@
+# VoiceToWebsite - AI-Powered Website Generator
+# Copyright © 2024-2026 3000 Studios. All rights reserved.
+# Owner: 3000 Studios
+# Creator: Mr. JW Swain (mr.jwswain@gmail.com)
+# This software is proprietary and confidential.
+
 node_modules/
 build/
 dist/
@@ -6,3 +12,11 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Sensitive files - NEVER commit these
+service-account-key.json
+*.key
+*.pem
+secrets/
+private/
+*.private

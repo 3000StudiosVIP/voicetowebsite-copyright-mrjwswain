@@ -1,9 +1,20 @@
-import express from "express";
-import { createServer as createViteServer } from "vite";
-import path from "path";
-import { fileURLToPath } from "url";
-import Stripe from "stripe";
+/**
+ * VoiceToWebsite - Development Server
+ *
+ * Copyright © 2024-2026 3000 Studios. All rights reserved.
+ * Owner: 3000 Studios
+ * Creator: Mr. JW Swain (mr.jwswain@gmail.com)
+ *
+ * This software is proprietary and confidential.
+ * Unauthorized use, reproduction, or distribution is strictly prohibited.
+ */
+
 import dotenv from "dotenv";
+import express from "express";
+import path from "path";
+import Stripe from "stripe";
+import { fileURLToPath } from "url";
+import { createServer as createViteServer } from "vite";
 
 dotenv.config();
 
