@@ -1,20 +1,17 @@
-import { motion, AnimatePresence } from "motion/react";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
-import { 
-  ArrowRight, 
-  HelpCircle, 
-  BookOpen, 
-  Star, 
-  Mic, 
-  Globe, 
-  Shield, 
-  Zap, 
-  MessageSquare, 
-  User, 
-  CheckCircle2, 
-  Loader2 
+import {
+    ArrowRight,
+    Globe,
+    HelpCircle,
+    Loader2,
+    MessageSquare,
+    Shield,
+    Star,
+    User,
+    Zap
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { ExamplesSection, TrustSection } from "./home/HomeContent";
 
@@ -279,9 +276,9 @@ export const SetupPage = () => {
   );
 };
 
+import { addDoc, collection, doc, getDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "../lib/AuthContext";
 import { db } from "../lib/firebase";
-import { addDoc, collection, doc, getDoc, serverTimestamp } from "firebase/firestore";
 
 export const SitePreviewPage = () => {
   const location = useLocation();

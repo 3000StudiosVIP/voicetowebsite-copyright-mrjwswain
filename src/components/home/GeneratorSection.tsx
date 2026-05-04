@@ -1,7 +1,7 @@
+import { Download, Eye, Loader2, Lock, Mic, Wand2 } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Mic, Send, Loader2, Wand2, ArrowLeft, ArrowRight, Eye, Download, Lock } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { generateWebsiteVariations, WebsiteConfig } from "../../services/aiService";
 
