@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { 
   ArrowRight, 
   HelpCircle, 
@@ -281,13 +281,58 @@ export const SetupPage = () => {
 
 import { useAuth } from "../lib/AuthContext";
 import { db } from "../lib/firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, serverTimestamp } from "firebase/firestore";
 
 export const SitePreviewPage = () => {
   const location = useLocation();
-  const config = location.state?.config;
-  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const configFromState = location.state?.config;
+  const [config, setConfig] = useState(configFromState);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
+  const [previewError, setPreviewError] = useState<string | null>(null);
+  const { user } = useAuth();
+  const previewId = searchParams.get("id");
+
+  useEffect(() => {
+    if (!config && previewId) {
+      if (!db) {
+        setPreviewError("Database is not configured.");
+        return;
+      }
+
+      const loadPreview = async () => {
+        setIsLoadingPreview(true);
+        try {
+          const siteDoc = await getDoc(doc(db, "sites", previewId));
+          if (!siteDoc.exists()) {
+            setPreviewError("Preview site not found.");
+            return;
+          }
+
+          const siteData = siteDoc.data();
+          setConfig({
+            id: previewId,
+            name: siteData.title || "Generated Site",
+            mood: siteData.industry || "Business",
+            bestUseCase: siteData.bestUseCase || "Business Website",
+            conversionFocus: siteData.conversionFocus || "Conversion",
+            fontPair: siteData.fontPair || "Inter / System",
+            palette: siteData.palette || ["#06b6d4", "#8b5cf6"],
+            qualityScore: siteData.qualityScore || 85,
+            html: siteData.html || "<html><body><h1>Preview unavailable</h1></body></html>",
+          });
+        } catch (error) {
+          console.error("Error loading preview site:", error);
+          setPreviewError("Unable to load preview site.");
+        } finally {
+          setIsLoadingPreview(false);
+        }
+      };
+
+      loadPreview();
+    }
+  }, [config, previewId]);
 
   const handleSave = async () => {
     if (!user) {
@@ -318,6 +363,25 @@ export const SitePreviewPage = () => {
       setIsSaving(false);
     }
   };
+
+  if (isLoadingPreview) {
+    return (
+      <div className="pt-40 pb-24 px-6 flex flex-col items-center min-h-screen text-center">
+        <h1 className="text-4xl font-black mb-4 italic">Loading Preview...</h1>
+        <p className="text-white/40">Fetching your saved site from Cloudflare / Firestore.</p>
+      </div>
+    );
+  }
+
+  if (previewError) {
+    return (
+      <div className="pt-40 pb-24 px-6 flex flex-col items-center min-h-screen text-center">
+        <h1 className="text-4xl font-black mb-4 italic">Preview Error</h1>
+        <p className="text-white/40 mb-8">{previewError}</p>
+        <Link to="/" className="px-8 py-4 bg-brand-cyan text-black font-black rounded-2xl hover:scale-105 transition-transform uppercase text-xs tracking-widest">Back to Home</Link>
+      </div>
+    );
+  }
 
   if (!config) {
     return (

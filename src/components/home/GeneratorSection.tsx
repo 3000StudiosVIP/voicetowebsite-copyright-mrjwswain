@@ -18,7 +18,7 @@ export const GeneratorSection = () => {
     try {
       const results = await generateWebsiteVariations(prompt);
       setVariations(results);
-      setActiveVariation(0);
+      setActiveVariation(results.length > 0 ? 0 : null);
     } catch (error) {
       console.error(error);
     } finally {
@@ -145,13 +145,19 @@ export const GeneratorSection = () => {
                        <div className="w-3 h-3 rounded-full bg-green-500/50" />
                     </div>
                     <div className="flex gap-4">
-                       <Link 
-                         to="/preview" 
-                         state={{ config: variations[activeVariation!] }}
-                         className="flex items-center gap-2 text-xs text-brand-cyan hover:text-white transition-colors"
-                       >
-                         <Eye className="w-4 h-4" /> Expand Preview
-                       </Link>
+                       {activeVariation !== null && variations[activeVariation] ? (
+                         <Link 
+                           to="/preview" 
+                           state={{ config: variations[activeVariation] }}
+                           className="flex items-center gap-2 text-xs text-brand-cyan hover:text-white transition-colors"
+                         >
+                           <Eye className="w-4 h-4" /> Expand Preview
+                         </Link>
+                       ) : (
+                         <div className="flex items-center gap-2 text-xs text-white/30 opacity-60">
+                           <Eye className="w-4 h-4" /> Generate a preview first
+                         </div>
+                       )}
                        <Link to="/setup" className="flex items-center gap-2 text-xs text-white/40 hover:text-white transition-colors"><Download className="w-4 h-4" /> Save Variation</Link>
                     </div>
                  </div>
@@ -161,7 +167,7 @@ export const GeneratorSection = () => {
                     <div className="absolute inset-0 z-10 pointer-events-none border-[12px] border-[#0a0a0a] rounded-[2rem]" />
                     <div className="h-full bg-black relative">
                        <AnimatePresence mode="wait">
-                          {activeVariation !== null && (
+                          {activeVariation !== null && variations[activeVariation] ? (
                             <motion.div
                               key={activeVariation}
                               initial={{ opacity: 0 }}
@@ -176,6 +182,8 @@ export const GeneratorSection = () => {
                                  sandbox="allow-scripts allow-same-origin"
                                />
                             </motion.div>
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-white/40 text-sm">Generate a preview to see it here.</div>
                           )}
                        </AnimatePresence>
                     </div>
