@@ -478,5 +478,11 @@
     "zod",
     "tanstack",
     "uuidv"
-  ]
+  ],
+  "localLLM.apiUrl": "http://localhost:11434/v1/chat/completions",
+  "localLLM.token": "ollama",
+  "localLLM.model": "llama3.2",
+  "localLLM.temperature": 0.2,
+  "localLLM.maxTokens": 2048,
+  "localLLM.requestTimeout": 120000
 }
